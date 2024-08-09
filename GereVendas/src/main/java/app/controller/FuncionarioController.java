@@ -20,7 +20,7 @@ import app.service.FuncionarioService;
 
 
 @RestController
-@RequestMapping("/api/Funcionario")
+@RequestMapping("/funcionario")
 public class FuncionarioController {
 
 	@Autowired
@@ -37,15 +37,15 @@ public class FuncionarioController {
 	}
 
 
-	@PutMapping("/update/{index}")
-	public ResponseEntity<String> update(@RequestBody Funcionario funcionario, @PathVariable  Long id) {
-		try {
-			String msn = this.funcionarioService.update(funcionario,  id);
-			return new ResponseEntity<>(msn, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-	}
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> update(@RequestBody Funcionario funcionario, @PathVariable Long id) {
+        try {
+            String msn = this.funcionarioService.update(funcionario, id);
+            return new ResponseEntity<>(msn, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 	@GetMapping("/findById/{index}")
 	public ResponseEntity<Funcionario> findById(@PathVariable int index) {

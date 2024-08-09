@@ -14,18 +14,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import app.entity.Cliente;
-import app.entity.Produto;
 import app.service.ClienteService;
 
 @RestController
-@RequestMapping("/api/cliente")
+@RequestMapping("/cliente")
 public class ClienteController {
 	
 	@Autowired
 	private ClienteService clienteService;
 
 	@PostMapping("/save")
-	public ResponseEntity<String>save(@RequestBody Cliente cliente){
+	public ResponseEntity<String> save(@RequestBody Cliente cliente){
 		try {
 			String msn = this.clienteService.save(cliente);
 			return new ResponseEntity<>(msn, HttpStatus.OK);
@@ -34,20 +33,21 @@ public class ClienteController {
 		}
 	}
 	
-	@PutMapping("/update/{index}")
-	public ResponseEntity<String> update(@RequestBody Cliente cliente, @PathVariable int index){
+	@PutMapping("/update/{id}")
+	public ResponseEntity<String> update(@RequestBody Cliente cliente, @PathVariable Long id){
 		try {
-			String msn = this.clienteService.update(cliente, index);
+			String msn = this.clienteService.update(cliente, id);
 			return new ResponseEntity<>(msn, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	@GetMapping("/findById/{index}")
-	public ResponseEntity<Cliente> findById(@PathVariable int index) {
+	
+	@GetMapping("/findById/{id}")
+	public ResponseEntity<Cliente> findById(@PathVariable Long id) {
 		try {
-			Cliente bibliotecaEntity = this.clienteService.findById(index);
-			return new ResponseEntity<>(bibliotecaEntity, HttpStatus.OK);
+			Cliente cliente = this.clienteService.findById(id);
+			return new ResponseEntity<>(cliente, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
@@ -56,14 +56,14 @@ public class ClienteController {
 	@GetMapping("/findAll")
 	public ResponseEntity<List<Cliente>> findAll() {
 		try {
-			List<Cliente> lista = this.clienteService.findALl();
+			List<Cliente> lista = this.clienteService.findAll();
 			return new ResponseEntity<>(lista, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
 
-	@DeleteMapping("/delete/{index}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> delete(@PathVariable Long id) {
 		try {
 			String msn = this.clienteService.delete(id);
@@ -72,8 +72,4 @@ public class ClienteController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
-	
-
 }

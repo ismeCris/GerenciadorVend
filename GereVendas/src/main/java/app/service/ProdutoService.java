@@ -25,13 +25,14 @@ public class ProdutoService {
 		return"Produto atualizado com sucesso";
 	}
 	
-	public Produto findById(long id) {
-		Optional<Produto>optional = this.produtoRepository.findById(id);
-		if(optional.isEmpty()) {
-			return optional.get();
-		}else
-			return null;
-	}
+	  public Produto findById(Long id) {
+	        Optional<Produto> optional = this.produtoRepository.findById(id);
+	        if (optional.isPresent()) {
+	            return optional.get();
+	        } else {
+	            throw new RuntimeException("Produto com ID " + id + " não encontrado");
+	        }
+	    }
 	public List<Produto> findAll(){
 		return this.produtoRepository.findAll();
 		}

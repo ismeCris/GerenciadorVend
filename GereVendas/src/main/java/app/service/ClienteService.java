@@ -34,7 +34,7 @@ public class ClienteService {
 		}else
 			return null;
 		}
-	public List<Cliente> findALl(){
+	public List<Cliente> findAll(){
 		return this.clienteRepository.findAll();
 	}
 	
