@@ -7,38 +7,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.entity.Produto;
+import app.entity.Venda;
 import app.repository.ProdutoRepositoy;
+import app.repository.VendaRepository;
 
 @Service
 public class VendaService {
 	@Autowired
-	private ProdutoRepositoy produtoRepository;
-	
-	private String save(Produto produto) {
-		this.produtoRepository.save(produto);
-		return" Produto salvo com sucesso!";
-	}
-	private String update(Produto produto, long id) {
-		produto.setId(id);
-		this.produtoRepository.save(produto);
-		return "Produto atualizado com sucesso!";
-	}
-	
-	public Produto findById(Long id) {
-		Optional<Produto> optional= this.produtoRepository.findById(id);
-		if(optional.isPresent()) {
-			return optional.get();
-		}else
-			return null;
-	}
-	
-	public List<Produto>findAll(){
-		return this.produtoRepository.findAll();
-	}
-	
-	public String delete(Long id) {
-		this.produtoRepository.deleteById(id);
-		return"Produto deletado com sucesso!";
-	}
+    private VendaRepository vendaRepository;
+
+    public String save(Venda venda) {
+        this.vendaRepository.save(venda);
+        return "Venda salva com sucesso!";
+    }
+
+    public String update(Venda venda, Long id) {
+        venda.setId(id);
+        this.vendaRepository.save(venda);
+        return "Venda atualizada com sucesso!";
+    }
+
+    public Venda findById(Long id) {
+        Optional<Venda> optional = this.vendaRepository.findById(id);
+        return optional.orElse(null);
+    }
+
+    public List<Venda> findAll() {
+        return this.vendaRepository.findAll();
+    }
+
+    public String delete(Long id) {
+        this.vendaRepository.deleteById(id);
+        return "Venda deletada com sucesso!";
+    }
 
 }
