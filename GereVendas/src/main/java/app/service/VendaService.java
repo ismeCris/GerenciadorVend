@@ -10,19 +10,24 @@ import app.entity.Produto;
 import app.entity.Venda;
 import app.repository.ProdutoRepositoy;
 import app.repository.VendaRepository;
-
 @Service
 public class VendaService {
-	@Autowired
+
+    @Autowired
     private VendaRepository vendaRepository;
 
     public String save(Venda venda) {
+        double valorTotal = venda.calcularValorTotal();
+        venda.setVlTotal(valorTotal); // Atualiza o valor total antes de salvar
         this.vendaRepository.save(venda);
         return "Venda salva com sucesso!";
     }
 
+
     public String update(Venda venda, Long id) {
         venda.setId(id);
+        double valorTotal = venda.calcularValorTotal();
+        venda.setVlTotal(valorTotal); // Atualiza o valor total antes de salvar
         this.vendaRepository.save(venda);
         return "Venda atualizada com sucesso!";
     }
@@ -40,5 +45,5 @@ public class VendaService {
         this.vendaRepository.deleteById(id);
         return "Venda deletada com sucesso!";
     }
-
 }
+

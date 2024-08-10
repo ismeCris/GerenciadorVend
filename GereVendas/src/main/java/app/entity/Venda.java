@@ -43,4 +43,14 @@ public class Venda {
 	@ManyToMany
 	@JoinTable(name="venda_tem_produto")
 	private List<Produto> produtos;
+	
+	public double calcularValorTotal() {
+	    if (produtos == null || produtos.isEmpty()) {
+	        return 0.0;
+	    }
+	    return produtos.stream()
+	                   .mapToDouble(Produto::getPreco)
+	                   .sum();
+	}
+
 }
