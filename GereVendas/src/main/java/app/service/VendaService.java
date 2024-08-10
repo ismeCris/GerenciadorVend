@@ -18,7 +18,7 @@ public class VendaService {
 
     public String save(Venda venda) {
         double valorTotal = venda.calcularValorTotal();
-        venda.setVlTotal(valorTotal); // Atualiza o valor total antes de salvar
+        venda.setVlTotal(valorTotal); 
         this.vendaRepository.save(venda);
         return "Venda salva com sucesso!";
     }
@@ -27,7 +27,7 @@ public class VendaService {
     public String update(Venda venda, Long id) {
         venda.setId(id);
         double valorTotal = venda.calcularValorTotal();
-        venda.setVlTotal(valorTotal); // Atualiza o valor total antes de salvar
+        venda.setVlTotal(valorTotal); 
         this.vendaRepository.save(venda);
         return "Venda atualizada com sucesso!";
     }
@@ -44,6 +44,13 @@ public class VendaService {
     public String delete(Long id) {
         this.vendaRepository.deleteById(id);
         return "Venda deletada com sucesso!";
+    }
+    public List<Venda> findByClienteNome(String nome){
+    	return vendaRepository.findByClienteNome(nome);
+    }
+    
+    public List<Venda> listarTop10VendasMaisAltas() {
+        return vendaRepository.findTop10ByOrderByVlTotalDesc();
     }
 }
 

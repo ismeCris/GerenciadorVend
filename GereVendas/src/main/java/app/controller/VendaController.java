@@ -74,5 +74,21 @@ public class VendaController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/buscarPorCliente")
+    public ResponseEntity<List<Venda>>findByClienteNome (@RequestBody String nome){
+    	List<Venda> vendas = vendaService.findByClienteNome(nome);
+    	return ResponseEntity.ok(vendas);
+    }
+    
+
+    @GetMapping("/top10MaisAltas")
+    public ResponseEntity<List<Venda>> listarTop10VendasMaisAltas() {
+        try {
+            List<Venda> vendas = vendaService.listarTop10VendasMaisAltas();
+            return new ResponseEntity<>(vendas, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
 

@@ -41,4 +41,8 @@ public class ProdutoService {
 		this.produtoRepository.deleteById(id);
 		return "Produto deletado com sucesso";
 	}
+	
+	public List<Produto> listarTop10ProdutosMaisCaros() {
+        return produtoRepository.findTop10ByOrderByPrecoDesc();
+    }
 }

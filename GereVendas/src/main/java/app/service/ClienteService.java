@@ -42,4 +42,9 @@ public class ClienteService {
 		this.clienteRepository.deleteById(id);
 		return" Cliente deletado com sucesso!";
 	}
+	 public List<Cliente> findIdade18a35() {
+	        return clienteRepository.findIdade18a35(18, 35);
+	    }
 }
+
+
