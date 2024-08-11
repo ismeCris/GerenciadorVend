@@ -45,10 +45,15 @@ public class VendaService {
         this.vendaRepository.deleteById(id);
         return "Venda deletada com sucesso!";
     }
-    public List<Venda> findByClienteNome(String nome){
-    	return vendaRepository.findByClienteNome(nome);
+    /*-----------------------------------------------------------------------*/
+    public List<Venda> findByClienteNome(String nome) {
+        return vendaRepository.findByClienteNomeContaining(nome);
     }
-    
+
+    public List<Venda> findByFuncionarioNome(String nome) {
+        return vendaRepository.findByFuncionarioNomeContaining(nome);
+    }
+
     public List<Venda> listarTop10VendasMaisAltas() {
         return vendaRepository.findTop10ByOrderByVlTotalDesc();
     }

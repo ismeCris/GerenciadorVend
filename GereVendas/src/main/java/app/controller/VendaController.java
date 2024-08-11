@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.entity.Produto;
@@ -74,21 +75,25 @@ public class VendaController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/buscarPorCliente")
-    public ResponseEntity<List<Venda>>findByClienteNome (@RequestBody String nome){
-    	List<Venda> vendas = vendaService.findByClienteNome(nome);
-    	return ResponseEntity.ok(vendas);
-    }
     
+    /*-----------------------------------------------------------------------*/
+    @GetMapping("/buscarPorCliente")
+    public ResponseEntity<List<Venda>> findByClienteNomeContaining(@RequestParam String nome) {
+        List<Venda> vendas = vendaService.findByClienteNome(nome);
+        return ResponseEntity.ok(vendas);
+    }
+
+
+    @GetMapping("/buscarPorFuncionario")
+    public ResponseEntity<List<Venda>> findByFuncionarioNomeContaining(@RequestBody String nome) {
+        List<Venda> vendas = vendaService.findByFuncionarioNome(nome);
+        return ResponseEntity.ok(vendas);
+    }
 
     @GetMapping("/top10MaisAltas")
     public ResponseEntity<List<Venda>> listarTop10VendasMaisAltas() {
-        try {
-            List<Venda> vendas = vendaService.listarTop10VendasMaisAltas();
-            return new ResponseEntity<>(vendas, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        List<Venda> vendas = vendaService.listarTop10VendasMaisAltas();
+        return new ResponseEntity<>(vendas, HttpStatus.OK);
     }
 }
 
