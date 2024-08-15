@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import app.entity.Produto;
 
 public interface ProdutoRepositoy extends JpaRepository<Produto, Long>{
-	   @Query("SELECT p FROM Produto p ORDER BY p.preco DESC")
-	    List<Produto> findTop10ByOrderByPrecoDesc();
+	public List<Produto> findTop10ByOrderByValueDesc();
 
 }

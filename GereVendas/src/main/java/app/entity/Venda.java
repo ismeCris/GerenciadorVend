@@ -13,6 +13,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,29 +31,24 @@ public class Venda {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotBlank(message = "A descrição da venda é obrigatória.")
 	private String descricao;
 	private Double vlTotal;
 	
 	@ManyToOne
-	@JoinColumn(name="funcionario_id")
+	@JoinColumn(name = "funcionario_id")
 	@JsonIgnoreProperties("vendas")
 	private Funcionario funcionario;
 	
 	@ManyToOne
-	@JoinColumn(name="cliente_id")
+	@JoinColumn(name = "cliente_id")
+	@NotNull(message = "Um cliente deve estar vinculado à venda.")
 	private Cliente cliente;
 	
 	@ManyToMany
 	@JoinTable(name="venda_tem_produto")
+	@NotEmpty(message = "A lista de produtos não pode estar vazia.")
 	private List<Produto> produtos;
 	
-	public double calcularValorTotal() {
-	    if (produtos == null || produtos.isEmpty()) {
-	        return 0.0;
-	    }
-	    return produtos.stream()
-	                   .mapToDouble(Produto::getPreco)
-	                   .sum();
-	}
 
 }

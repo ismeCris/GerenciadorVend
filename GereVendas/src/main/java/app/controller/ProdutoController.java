@@ -66,6 +66,7 @@ public class ProdutoController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+    /*-------------------------------------------*/
     @GetMapping("/top10MaisCaros")
     public List<Produto> listarTop10ProdutosMaisCaros() {
         return produtoService.listarTop10ProdutosMaisCaros();

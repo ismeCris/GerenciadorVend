@@ -77,23 +77,35 @@ public class VendaController {
     }
     
     /*-----------------------------------------------------------------------*/
-    @GetMapping("/buscarPorCliente")
-    public ResponseEntity<List<Venda>> findByClienteNomeContaining(@RequestParam String nome) {
-        List<Venda> vendas = vendaService.findByClienteNome(nome);
-        return ResponseEntity.ok(vendas);
-    }
+		@GetMapping("/findByClienteNomeContains")
+	public ResponseEntity<List<Venda>> findByClienteNomeContains(@RequestParam String nome) {
+		try {
+			List<Venda> vendas = this.vendaService.VendasPorNomeDeCliente(nome);
+			return new ResponseEntity<>(vendas, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+	}
+		
+	@GetMapping("/findByFuncionarioNomeContains")
+	public ResponseEntity<List<Venda>> findByFuncionarioNomeContains(@RequestParam String nome) {
+		try {
+			List<Venda> vendas = this.vendaService.VendasPorNomeDeFuncionario(nome);
+			return new ResponseEntity<>(vendas, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+	}
+	
 
+    @GetMapping("/findTop10ByOrderByValorTotalDesc")
+	public ResponseEntity<List<Venda>> findTop10ByOrderByValorTotalDesc() {
+		try {
+			List<Venda> vendas = this.vendaService.DezMaioresVendas();
+			return new ResponseEntity<>(vendas, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}
+	}
 
-    @GetMapping("/buscarPorFuncionario")
-    public ResponseEntity<List<Venda>> findByFuncionarioNomeContaining(@RequestBody String nome) {
-        List<Venda> vendas = vendaService.findByFuncionarioNome(nome);
-        return ResponseEntity.ok(vendas);
-    }
-
-    @GetMapping("/top10MaisAltas")
-    public ResponseEntity<List<Venda>> listarTop10VendasMaisAltas() {
-        List<Venda> vendas = vendaService.listarTop10VendasMaisAltas();
-        return new ResponseEntity<>(vendas, HttpStatus.OK);
-    }
 }
-
