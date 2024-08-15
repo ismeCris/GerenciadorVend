@@ -21,6 +21,10 @@ public class VendaService {
 
     public String save(Venda venda) {
     	double valorTotal = this.calcularTotal(venda.getProdutos());
+    	 if (venda.getCliente().getIdade() < 18 && valorTotal > 500.0) {
+    	        throw new RuntimeException("Clientes menores de 18 anos não podem comprar acima de 500 reais.");
+    	    }
+
 		venda.setVlTotal(valorTotal);
 		this.vendaRepository.save(venda);
 		return "Venda cadastrado";
@@ -58,8 +62,8 @@ public class VendaService {
 
 		double valorTotal = 0;
 
-		for (Produto p : produtos) {
-			Produto produto = this.produtoService.findById(p.getId());
+		for (Produto pt : produtos) {
+			Produto produto = this.produtoService.findById(pt.getId());
 			valorTotal += produto.getPreco();
 		}
 		return valorTotal;

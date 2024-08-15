@@ -30,12 +30,10 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	 @NotBlank(message = "O nome é obrigatório e deve conter pelo menos duas palavras e um espaço.")
-	 @Pattern(regexp = "^[A-Z][a-z]+(?:\\s[A-Z][a-z]+)+$", message = "O nome deve conter pelo menos duas palavras e um espaço.")
+	@Pattern(regexp = "^\\S+(\\s+\\S+)+$", message = "O nome deve conter pelo menos duas palavras e um espaço.")
+	@NotBlank(message = "O nome é obrigatório.")
+	private String nome;
 
-	    private String nome;
-
-	
 	 @Email(message = "O email deve ser válido.")
 	    private String email;
 	 
