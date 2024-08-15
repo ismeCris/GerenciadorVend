@@ -3,7 +3,6 @@ package app.entity;
 import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.data.repository.query.Param;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

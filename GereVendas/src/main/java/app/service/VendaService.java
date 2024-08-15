@@ -28,19 +28,14 @@ public class VendaService {
 
 
     public String update(Venda venda, Long id) {
-        // Definindo o ID da venda
         venda.setId(id);
-        // Calculando o valor total dos produtos
         double valorTotal = this.calcularTotal(venda.getProdutos());
-        // Verificando a idade do cliente e o valor total da venda
         if (venda.getCliente().getIdade() < 18 && valorTotal > 500.0) {
             throw new RuntimeException("não pode comprar acima de 500 reais");
         }
-        // Definindo o valor total calculado na venda
         venda.setVlTotal(valorTotal);
-        // Salvando a venda no repositório
         this.vendaRepository.save(venda);
-        
+
         return "Venda atualizada com sucesso!";
     }
 
@@ -80,9 +75,9 @@ public class VendaService {
 	}
 	
 	 public List<Venda> DezMaioresVendas() {
-		return this.vendaRepository.DezMaioresVendas();
+		return this.vendaRepository.findTop10ByOrderByVlTotalDesc();
 	}
+	
 
 
 }
-

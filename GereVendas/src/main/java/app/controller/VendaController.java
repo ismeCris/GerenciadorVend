@@ -96,7 +96,7 @@ public class VendaController {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 	}
-	
+
 
     @GetMapping("/findTop10ByOrderByValorTotalDesc")
 	public ResponseEntity<List<Venda>> findTop10ByOrderByValorTotalDesc() {

@@ -43,6 +43,6 @@ public class ProdutoService {
 	}
 	
 	public List<Produto> listarTop10ProdutosMaisCaros() {
-        return produtoRepository.findTop10ByOrderByValueDesc();
+        return produtoRepository.findTop10ByOrderByPrecoDesc();
     }
 }
