@@ -30,19 +30,22 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@NotBlank(message ="O nome do Cliente é obrigatória. ")
-	@Pattern(regexp = "^[A-Za-zÀ-ÿ]+(\\s+[A-Za-zÀ-ÿ]+)+$")
-	private String nome;
-	
-	@Email
-	private String email;
-	
-	@Pattern(regexp = "^\\(\\d{2}\\) \\d{4,5}-\\d{4}$")
-	private String telefone;
+	 @NotBlank(message = "O nome é obrigatório e deve conter pelo menos duas palavras e um espaço.")
+	 @Pattern(regexp = "^[A-Z][a-z]+(?:\\s[A-Z][a-z]+)+$", message = "O nome deve conter pelo menos duas palavras e um espaço.")
+
+	    private String nome;
 
 	
-	@CPF
-	private String cpf;
+	 @Email(message = "O email deve ser válido.")
+	    private String email;
+	 
+	 @NotBlank(message = "O telefone é obrigatório.")
+	    @Pattern(regexp = "^\\(\\d{2}\\) \\d{4,5}-\\d{4}$", message = "O telefone deve seguir o padrão: (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.")
+	    private String telefone;
+
+	    @NotBlank(message = "O CPF é obrigatório.")
+	  @CPF(message = "O CPF deve ser válido.")
+	    private String cpf;
 	
 	@Min(value = 0, message ="A idade nao pode ser negativa.")
 	private int idade;
@@ -50,7 +53,7 @@ public class Cliente {
 	@NotBlank(message ="O endereço do cliente é obrigatória. ")
 	private String  endereco;
 	
-	@Pattern(regexp = "\\d{5}-\\d{3}")
+	@Pattern(regexp = "\\d{5}-\\d{3}", message = "O CEP deve seguir o padrão XXXXX-XXX.")
 	private String cep;
 
 	@OneToMany(mappedBy = "cliente")

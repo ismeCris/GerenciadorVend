@@ -49,5 +49,6 @@ public class Venda {
 	@NotEmpty(message = "A lista de produtos não pode estar vazia.")
 	private List<Produto> produtos;
 	
-
+	@NotBlank(message = "A observação da venda é obrigatória.")
+	private String observacao;
 }
