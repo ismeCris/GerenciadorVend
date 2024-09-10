@@ -19,29 +19,35 @@ public class ClienteService {
 		return "Cliente salvo com sucesso";
 	}
 	public String update(Cliente cliente, long id) {
-		cliente.setId(id);
-		this.clienteRepository.save(cliente);
-		return  "Atualizado com sucesso";
+	    if (!clienteRepository.existsById(id)) {
+	        throw new RuntimeException("Cliente com ID " + id + " não encontrado");
+	    }
+	    cliente.setId(id);
+	    this.clienteRepository.save(cliente);
+	    return "Atualizado com sucesso";
 	}
 
-	public Cliente findById(long id) {
-		Optional<Cliente> optional = this.clienteRepository.findById(id);
-		if(optional.isPresent()) {
-			return optional.get();
-		}else
-			return null;
-		}
+	public Cliente findById(Long id) {
+	    Optional<Cliente> cliente = clienteRepository.findById(id);
+	    return cliente.orElse(null); // Retorna null se o cliente não for encontrado
+	}
+
 	public List<Cliente> findAll(){
 		return this.clienteRepository.findAll();
 	}
 	
 	public String delete(Long id) {
-		this.clienteRepository.deleteById(id);
-		return" Cliente deletado com sucesso!";
+	    if (!clienteRepository.existsById(id)) {
+	        throw new RuntimeException("Cliente não encontrado!");
+	    }
+	    clienteRepository.deleteById(id);
+	    return "Cliente deletado com sucesso!";
 	}
 	 public List<Cliente> findIdade18a35() {
 	        return clienteRepository.findIdade18a35(18, 35);
 	    }
+	 
+	 
 }
 
 

@@ -21,61 +21,61 @@ import app.service.VendaService;
 @RequestMapping("/venda")
 public class VendaController {
 
-    @Autowired
-    private VendaService vendaService;
+	@Autowired
+	private VendaService vendaService;
 
-    @PostMapping("/save")
-    public ResponseEntity<String> save(@RequestBody Venda venda) {
-        try {
-            String msn = this.vendaService.save(venda);
-            return new ResponseEntity<>(msn, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Deu Erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+	@PostMapping("/save")
+	public ResponseEntity<String> save(@RequestBody Venda venda) {
+		try {
+			String msn = this.vendaService.save(venda);
+			return new ResponseEntity<>(msn, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Deu Erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> update(@RequestBody Venda venda, @PathVariable Long id) {
-        try {
-            String msn = this.vendaService.update(venda, id);
-            return new ResponseEntity<>(msn, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+	@PutMapping("/update/{id}")
+	public ResponseEntity<String> update(@RequestBody Venda venda, @PathVariable Long id) {
+		try {
+			String msn = this.vendaService.update(venda, id);
+			return new ResponseEntity<>(msn, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @GetMapping("/findById/{id}")
-    public ResponseEntity<Venda> findById(@PathVariable Long id) {
-        try {
-            Venda venda = this.vendaService.findById(id);
-            return new ResponseEntity<>(venda, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
+	@GetMapping("/findById/{id}")
+	public ResponseEntity<Venda> findById(@PathVariable Long id) {
+		try {
+			Venda venda = this.vendaService.findById(id);
+			return new ResponseEntity<>(venda, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<Venda>> findAll() {
-        try {
-            List<Venda> lista = this.vendaService.findAll();
-            return new ResponseEntity<>(lista, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
+	@GetMapping("/findAll")
+	public ResponseEntity<List<Venda>> findAll() {
+		try {
+			List<Venda> lista = this.vendaService.findAll();
+			return new ResponseEntity<>(lista, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        try {
-            String msn = this.vendaService.delete(id);
-            return new ResponseEntity<>(msn, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
-    }
-    
-    /*-----------------------------------------------------------------------*/
-		@GetMapping("/findByClienteNomeContains")
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> delete(@PathVariable Long id) {
+		try {
+			String msn = this.vendaService.delete(id);
+			return new ResponseEntity<>(msn, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/*-----------------------------------------------------------------------*/
+	@GetMapping("/findByClienteNomeContains")
 	public ResponseEntity<List<Venda>> findByClienteNomeContains(@RequestParam String nome) {
 		try {
 			List<Venda> vendas = this.vendaService.VendasPorNomeDeCliente(nome);
@@ -84,7 +84,7 @@ public class VendaController {
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		}
 	}
-		
+
 	@GetMapping("/findByFuncionarioNomeContains")
 	public ResponseEntity<List<Venda>> findByFuncionarioNomeContains(@RequestParam String nome) {
 		try {
@@ -95,8 +95,7 @@ public class VendaController {
 		}
 	}
 
-
-    @GetMapping("/findTop10ByOrderByValorTotalDesc")
+	@GetMapping("/findTop10ByOrderByValorTotalDesc")
 	public ResponseEntity<List<Venda>> findTop10ByOrderByValorTotalDesc() {
 		try {
 			List<Venda> vendas = this.vendaService.DezMaioresVendas();

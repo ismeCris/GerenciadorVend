@@ -25,34 +25,45 @@ public class ClienteController {
 	private ClienteService clienteService;
 
 	@PostMapping("/save")
-	public ResponseEntity<String> save(@RequestBody Cliente cliente){
-		try {
-			String msn = this.clienteService.save(cliente);
-			return new ResponseEntity<>(msn, HttpStatus.OK);
-		} catch (Exception e) {
-			 return new ResponseEntity<>("Deu Erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<String> save(@RequestBody Cliente cliente) {
+	    try {
+	        if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
+	            throw new IllegalArgumentException("Nome do cliente não pode ser vazio");
+	        }
+	        String msn = this.clienteService.save(cliente);
+	        return new ResponseEntity<>(msn, HttpStatus.OK);
+	    } catch (IllegalArgumentException e) {
+	        return new ResponseEntity<>("Nome do cliente não pode ser vazio", HttpStatus.BAD_REQUEST);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("Deu Erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }
 	}
+
+
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<String> update(@RequestBody Cliente cliente, @PathVariable Long id){
-		try {
-			String msn = this.clienteService.update(cliente, id);
-			return new ResponseEntity<>(msn, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<String> update(@RequestBody Cliente cliente, @PathVariable Long id) {
+	    try {
+	        String msn = this.clienteService.update(cliente, id);
+	        return new ResponseEntity<>(msn, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("Deu erro! " + e.getMessage(), HttpStatus.BAD_REQUEST);
+	    }
 	}
-	
+
 	@GetMapping("/findById/{id}")
 	public ResponseEntity<Cliente> findById(@PathVariable Long id) {
-		try {
-			Cliente cliente = this.clienteService.findById(id);
-			return new ResponseEntity<>(cliente, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
+	    try {
+	        Cliente cliente = this.clienteService.findById(id);
+	        if (cliente == null) {
+	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        }
+	        return new ResponseEntity<>(cliente, HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+	    }
 	}
+
 
 	@GetMapping("/findAll")
 	public ResponseEntity<List<Cliente>> findAll() {

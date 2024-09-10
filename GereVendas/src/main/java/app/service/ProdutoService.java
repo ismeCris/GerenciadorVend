@@ -14,11 +14,17 @@ public class ProdutoService {
 	@Autowired
 	private ProdutoRepositoy produtoRepository;
 	
-	public String save(Produto produto) {
-		this.produtoRepository.save(produto);
-		return "Produto salvo com sucesso";
-	}
-	
+	 public String save(Produto produto) {
+	        // Validações
+	        if (produto.getNome() == null || produto.getNome().trim().isEmpty()) {
+	            throw new RuntimeException("Nome do produto não pode ser vazio");
+	        }
+	        if (produto.getPreco() == null || produto.getPreco() <= 0) {
+	            throw new RuntimeException("Preço do produto deve ser maior que zero");
+	        }
+	        produtoRepository.save(produto);
+	        return "Produto salvo com sucesso";
+	    }
 	public String update(Produto produto, long id) {
 		produto.setId(id);
 		this.produtoRepository.save(produto);
