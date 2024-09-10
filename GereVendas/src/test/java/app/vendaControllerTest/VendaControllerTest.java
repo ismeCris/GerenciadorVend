@@ -9,10 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.Collections;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -44,24 +41,7 @@ public class VendaControllerTest {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(vendaController).build();
     }
-/*
-    @Test
-    void testGetVendaById() throws Exception {
-        Venda venda = new Venda();
-        venda.setId(1L);
-        venda.setVlTotal(100.0);
 
-        when(vendaService.findById(1L)).thenReturn(venda);
-
-        mockMvc.perform(get("/venda/findById/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.valorTotal").value(100.0));
-
-        verify(vendaService, times(1)).findById(1L);
-    }
-
-*/
     @Test
     void testCreateVenda() throws Exception {
         String vendaJson = "{\"valorTotal\":100.0}";
@@ -153,105 +133,55 @@ public class VendaControllerTest {
 
         verify(vendaService, times(1)).save(any(Venda.class));
     }
-    /*
     @Test
-    void testFindAllVendas() throws Exception {
-        Venda venda1 = new Venda();
-        venda1.setId(1L);
-        venda1.setVlTotal(100.0);
+    void testUpdateVendaWithInvalidData() throws Exception {
+        String vendaJson = "{\"valorTotal\":150.0}"; 
 
-        Venda venda2 = new Venda();
-        venda2.setId(2L);
-        venda2.setVlTotal(200.0);
+        when(vendaService.update(any(Venda.class), any(Long.class)))
+                .thenThrow(new RuntimeException("Dados inválidos para atualização"));
 
-        List<Venda> lista = Arrays.asList(venda1, venda2);
+        mockMvc.perform(put("/venda/update/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(vendaJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Deu erro! Dados inválidos para atualização"));
 
-        when(vendaService.findAll()).thenReturn(lista);
+        verify(vendaService, times(1)).update(any(Venda.class), any(Long.class));
+    }
+    @Test
+    void testCreateVendaWithMissingFields() throws Exception {
+        String vendaJson = "{\"valorTotal\":}"; 
+
+        mockMvc.perform(post("/venda/save")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(vendaJson))
+                .andExpect(status().isBadRequest()); // Espera um erro de bad request
+
+        verify(vendaService, times(0)).save(any(Venda.class)); // Verifica que o serviço não foi chamado
+    }
+
+    @Test
+    void testFindAllVendasEmptyList() throws Exception {
+        when(vendaService.findAll()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/venda/findAll"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].valorTotal").value(100.0))
-                .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].valorTotal").value(200.0));
-
-        verify(vendaService, times(1)).findAll();
-    }
-*/
-
-/*
-    @Test
-    void testFindByClienteNomeContains() throws Exception {
-        Venda venda1 = new Venda();
-        venda1.setId(1L);
-        venda1.setCliente("Cliente Teste 1");
-
-        Venda venda2 = new Venda();
-        venda2.setId(2L);
-        venda2.setCliente("Cliente Teste 2");
-
-        List<Venda> lista = Arrays.asList(venda1, venda2);
-
-        when(vendaService.VendasPorNomeDeCliente("Cliente")).thenReturn(lista);
-
-        mockMvc.perform(get("/venda/findByClienteNomeContains")
-                .param("nome", "Cliente"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].clienteNome").value("Cliente Teste 1"))
-                .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].clienteNome").value("Cliente Teste 2"));
-
-        verify(vendaService, times(1)).VendasPorNomeDeCliente("Cliente");
+                .andExpect(jsonPath("$").isEmpty());
     }
 
     @Test
-    void testFindByFuncionarioNomeContains() throws Exception {
-        Venda venda1 = new Venda();
-        venda1.setId(1L);
-        venda1.setFuncionarioNome("Funcionario Teste 1");
+    void testCreateVendaWithMultipleProducts() throws Exception {
+        String vendaJson = "{\"valorTotal\":300.0, \"produtos\":[{\"id\":1, \"preco\":100.0}, {\"id\":2, \"preco\":200.0}]}";
 
-        Venda venda2 = new Venda();
-        venda2.setId(2L);
-        venda2.setFuncionarioNome("Funcionario Teste 2");
+        when(vendaService.save(any(Venda.class))).thenReturn("Venda salva com sucesso!");
 
-        List<Venda> lista = Arrays.asList(venda1, venda2);
-
-        when(vendaService.VendasPorNomeDeFuncionario("Funcionario")).thenReturn(lista);
-
-        mockMvc.perform(get("/venda/findByFuncionarioNomeContains")
-                .param("nome", "Funcionario"))
+        mockMvc.perform(post("/venda/save")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(vendaJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].funcionarioNome").value("Funcionario Teste 1"))
-                .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].funcionarioNome").value("Funcionario Teste 2"));
+                .andExpect(content().string("Venda salva com sucesso!"));
 
-        verify(vendaService, times(1)).VendasPorNomeDeFuncionario("Funcionario");
-    }*/
-/*
-    @Test
-    void testFindTop10ByOrderByValorTotalDesc() throws Exception {
-        Venda venda1 = new Venda();
-        venda1.setId(1L);
-        venda1.setVlTotal(300.0);
+        verify(vendaService, times(1)).save(any(Venda.class));
+    }
 
-        Venda venda2 = new Venda();
-        venda2.setId(2L);
-        venda2.setVlTotal(250.0);
-
-        List<Venda> lista = Arrays.asList(venda1, venda2);
-
-        when(vendaService.DezMaioresVendas()).thenReturn(lista);
-
-        mockMvc.perform(get("/venda/findTop10ByOrderByValorTotalDesc"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].valorTotal").value(300.0))
-                .andExpect(jsonPath("$[1].id").value(2L))
-                .andExpect(jsonPath("$[1].valorTotal").value(250.0));
-
-        verify(vendaService, times(1)).DezMaioresVendas();
-    }*/
- 
 }

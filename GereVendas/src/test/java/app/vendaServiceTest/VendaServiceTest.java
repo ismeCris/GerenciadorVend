@@ -81,7 +81,7 @@ class VendaServiceTest {
 
 	@Test
 	@DisplayName("Não deve permitir venda acima de 500 para clientes menores de 18 anos")
-	void naoDevePermitirVendaParaMenoresDeIdade() {
+	void MenoresDeIdade() {
 		// Criar e salvar cliente
 		Cliente cliente = new Cliente();
 		cliente.setId(1L);
@@ -139,7 +139,7 @@ class VendaServiceTest {
 
 	@Test
 	@DisplayName("Buscar todas as vendas")
-	void buscartds() {
+	void buscarTodos() {
 	    // Criar clientes
 	    Cliente cliente1 = new Cliente();
 	    cliente1.setId(1L);
@@ -255,7 +255,7 @@ class VendaServiceTest {
 	}
 	@Test
 	@DisplayName("Não deve atualizar venda com cliente nulo")
-	void naoDeveAtualizarVendaComClienteNulo() {
+	void naoAtualizarClienteNulo() {
 	    Venda venda = new Venda();
 	    venda.setId(1L);
 	    venda.setCliente(null);  // Cliente nulo
@@ -272,7 +272,7 @@ class VendaServiceTest {
 
 	@Test
 	@DisplayName("Não deve atualizar venda com lista de produtos vazia")
-	void naoDeveAtualizarVendaComProdutosVazio() {
+	void naoAtualizarComProdutosVazio() {
 	    Venda venda = new Venda();
 	    venda.setId(1L);
 	    venda.setCliente(new Cliente());  // Cliente válido
@@ -290,7 +290,7 @@ class VendaServiceTest {
 
 	@Test
 	@DisplayName("Deve permitir venda para menor de idade com valor abaixo de 500 reais")
-	void devePermitirVendaParaMenorDeIdadeComValorAbaixoDe500() {
+	void AbaixoDe500() {
 	    Cliente cliente = new Cliente();
 	    cliente.setIdade(16);
 
@@ -309,6 +309,124 @@ class VendaServiceTest {
 
 	    assertEquals("Venda cadastrado", resultado);
 	}
+	
+	@Test
+	@DisplayName("Buscar venda por ID")
+	void buscarVendaPorId() {
+	    Venda venda = new Venda();
+	    venda.setId(1L);
+	    venda.setDescricao("Venda Teste");
+
+	    Mockito.when(vendaRepository.findById(1L)).thenReturn(Optional.of(venda));
+
+	    Venda resultado = vendaService.findById(1L);
+
+	    assertNotNull(resultado);
+	    assertEquals(1L, resultado.getId());
+	    assertEquals("Venda Teste", resultado.getDescricao());
+	}
+	
+	@Test
+	@DisplayName("Buscar vendas por nome de funcionário")
+	void buscarFuncionario() {
+	    Cliente cliente = new Cliente();
+	    cliente.setId(1L);
+	    cliente.setNome("Funcionário Teste");
+
+	    Produto produto = new Produto();
+	    produto.setId(1L);
+	    produto.setNome("Produto Teste");
+	    produto.setPreco(100.0);
+
+	    Venda venda = new Venda();
+	    venda.setCliente(cliente);
+	    venda.setProdutos(Arrays.asList(produto));
+	    venda.setVlTotal(100.0);
+
+	    Mockito.when(vendaRepository.VendasPorNomeDeFuncionario("Funcionário Teste"))
+	           .thenReturn(Arrays.asList(venda));
+
+	    List<Venda> vendas = vendaService.VendasPorNomeDeFuncionario("Funcionário Teste");
+
+	    assertNotNull(vendas);
+	    assertEquals(1, vendas.size());
+	    assertEquals(100.0, vendas.get(0).getVlTotal());
+	}
+	@Test
+	@DisplayName("Buscar vendas por nome de cliente")
+	void buscarCliente() {
+	    Cliente cliente = new Cliente();
+	    cliente.setId(1L);
+	    cliente.setNome("Cliente Teste");
+
+	    Produto produto = new Produto();
+	    produto.setId(1L);
+	    produto.setNome("Produto Teste");
+	    produto.setPreco(100.0);
+
+	    Venda venda = new Venda();
+	    venda.setCliente(cliente);
+	    venda.setProdutos(Arrays.asList(produto));
+	    venda.setVlTotal(100.0);
+
+	    Mockito.when(vendaRepository.VendasPorNomeDeCliente("Cliente Teste"))
+	           .thenReturn(Arrays.asList(venda));
+
+	    List<Venda> vendas = vendaService.VendasPorNomeDeCliente("Cliente Teste");
+
+	    assertNotNull(vendas);
+	    assertEquals(1, vendas.size());
+	    assertEquals(100.0, vendas.get(0).getVlTotal());
+	}
+	@Test
+	@DisplayName("Calcular total com lista nula")
+	void calcularListaNula() {
+	    double total = vendaService.calcularTotal(null);
+	    assertEquals(0.0, total);
+	}
+
+	@Test
+	@DisplayName("Calcular total com lista de produtos nulos")
+	void calcularProdutosNulos() {
+	    Produto produto1 = new Produto();
+	    produto1.setId(1L);
+	    produto1.setPreco(100.0);
+
+	    Produto produto2 = new Produto();
+	    produto2.setId(2L);
+	    produto2.setPreco(150.0);
+
+	    Mockito.when(produtoService.findById(1L)).thenReturn(produto1);
+	    Mockito.when(produtoService.findById(2L)).thenReturn(produto2);
+
+	    List<Produto> produtos = Arrays.asList(produto1, produto2);
+	    double total = vendaService.calcularTotal(produtos);
+	    assertEquals(250.0, total);
+	}
+	@Test
+	@DisplayName("Buscar venda por ID que não existe")
+	void buscarIdInexistente() {
+	    Mockito.when(vendaRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+	    Venda venda = vendaService.findById(1L);
+
+	    assertNull(venda);
+	}
+	@Test
+	@DisplayName("Tentar atualizar venda com ID não encontrado e cliente nulo")
+	void atualizarClienteNulo() {
+	    Mockito.when(vendaRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+
+	    Venda venda = new Venda();
+	    venda.setCliente(null); // Cliente nulo
+
+	    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+	        vendaService.update(venda, 1L);
+	    });
+
+	    assertEquals("Venda não encontrada", exception.getMessage());
+	}
+
 
 
 }

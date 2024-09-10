@@ -29,33 +29,28 @@ public class ClienteServiceTest {
 		cliente.setEmail("joao.silva@example.com");
 		cliente.setCpf("054.854.691-67");
 		cliente.setTelefone("(11) 98765-4321");
-		cliente.setEndereco("Rua Exemplo, 123"); // Adicione o endereço
+		cliente.setEndereco("Rua Exemplo, 123"); 
 
-		// Chama o serviço para salvar o cliente
 		String resultado = clienteService.save(cliente);
 
-		// Verifica o retorno esperado
 		assertEquals("Cliente salvo com sucesso", resultado);
 	}
 
 	@Test
 	@DisplayName("Buscar Cliente por ID com sucesso")
 	void buscarClientePorId() {
-		// Inserir um Cliente no banco antes de buscar
+
 		Cliente cliente = new Cliente();
 		cliente.setNome("João Silva");
 		cliente.setEmail("joao.silva@example.com");
 		cliente.setCpf("054.854.691-67");
 		cliente.setTelefone("(11) 98765-4321");
-		cliente.setEndereco("Rua Exemplo, 123"); // Adicione o endereço
+		cliente.setEndereco("Rua Exemplo, 123"); 
 
-		// Salvar o Cliente para garantir que ele exista
 		clienteService.save(cliente);
 
-		// Agora buscar o Cliente recém salvo
-		Cliente resultado = clienteService.findById(cliente.getId()); // Use o ID gerado
+		Cliente resultado = clienteService.findById(cliente.getId()); 
 
-		// Verificar se o Cliente foi encontrado
 		assertNotNull(resultado);
 		assertEquals("João Silva", resultado.getNome());
 	}
@@ -71,23 +66,19 @@ public class ClienteServiceTest {
 		cliente.setTelefone("(11) 98765-4321");
 		cliente.setEndereco("Rua Exemplo, 123");
 
-		// Salvar o Cliente no banco
 		clienteService.save(cliente);
 
-		// Excluir o Cliente pelo ID gerado
 		clienteService.delete(cliente.getId());
 
-		// Verificar se o Cliente foi realmente excluído
 		Cliente clienteExcluido = clienteService.findById(cliente.getId());
 
-		// Verifique se o Cliente retornado é null (o que indica que foi excluído)
 		assertNull(clienteExcluido);
 	}
 
 	@Test
 	@DisplayName("Salvar Cliente com CPF inválido")
 	void CpfInvalido() {
-		// Criar um funcionário
+
 		Cliente cliente = new Cliente();
 		cliente.setNome("Maria Silva");
 		cliente.setEmail("maria.silva@example.com");
@@ -95,7 +86,6 @@ public class ClienteServiceTest {
 		cliente.setTelefone("(11) 98765-4321");
 		cliente.setEndereco("Rua Exemplo, 123");
 
-		// Verificar se a exceção de validação é lançada
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			clienteService.save(cliente);
 		});
@@ -106,19 +96,17 @@ public class ClienteServiceTest {
 	@DisplayName("Atualizar Cliente inexistente")
 	void atualizarClienteInexistente() {
 		Cliente cliente = new Cliente();
-		cliente.setId(999); // ID inexistente
+		cliente.setId(999); 
 		cliente.setNome("Maria Silva");
 		cliente.setEmail("maria.silva@example.com");
 		cliente.setCpf("054.854.691-00");
 		cliente.setTelefone("(11) 98765-4321");
 		cliente.setEndereco("Rua Exemplo, 123");
 
-		// Tentar atualizar um Cliente que não existe
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			clienteService.update(cliente, 999L); // ID inexistente
+			clienteService.update(cliente, 999L); 
 		});
 
-		// Verificar se a mensagem da exceção contém a mensagem esperada
 		assertTrue(exception.getMessage().contains("Cliente com ID 999 não encontrado"),
 				"A mensagem da exceção não contém o texto esperado.");
 	}
@@ -152,9 +140,9 @@ public class ClienteServiceTest {
 	@Test
 	@DisplayName("Excluir Cliente inexistente")
 	void excluirClienteInexistente() {
-		// Tentar excluir um funcionário com ID que não existe
+		
 		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-			clienteService.delete(999L); // ID inexistente
+			clienteService.delete(999L); 
 		});
 
 		assertTrue(exception.getMessage().contains("Cliente não encontrado!"));
@@ -164,7 +152,7 @@ public class ClienteServiceTest {
 	@DisplayName("Salvar Cliente sem nome")
 	void salvarClienteSemNome() {
 	    Cliente cliente = new Cliente();
-	    cliente.setNome(null); // Nome não pode ser nulo
+	    cliente.setNome(null); 
 	    cliente.setEmail("teste@example.com");
 	    cliente.setCpf("123.456.789-00");
 	    cliente.setTelefone("(11) 98765-4321");
